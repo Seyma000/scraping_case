@@ -1,24 +1,30 @@
-# Web-Scrape Case Study
+# 🏕️ The Dyrt Campground Scraper
 
-## Overview
-Develop a scraper to extract all campground locations across the United States from The Dyrt https://thedyrt.com/search by leveraging their map interface which exposes latitude/longitude data through API requests when the mouse moves. You're free to use any library you want (requests, httpx, selenium, playwright)
-For questions please connect us via email at info@smart-maple.com
+Bu proje, [The Dyrt](https://thedyrt.com/) platformundaki kamp alanı verilerini otomatik olarak toplayan, doğrulayan ve PostgreSQL veritabanına kaydeden bir scraping sistemidir.
 
-**Hint:** Look for a search endpoint in the network tab!
+## 🚀 Özellikler
 
-## Core Requirements
-- We provided a Docker compose file, you need to connect to PostgreSQL, create the necessary fields/tables (15p)
-- Scrape all campground data from the US map interface and store it in the database (30p)
-- Validate the data with pydantic, you can check the necessary fields from src/models/campground.py (these fields are the required fields to store in the db) (15p)
-- Scheduling: Cron-like scheduling for regular updates (15p)
-- Update: update existing records if they exist. (10p)
-- Error handling: handle errors in your code, especially HTTP errors, aand add retries if necessary (15p)
+- 📦 Kamp alanı verilerini API üzerinden çeker
+- ✅ Pydantic ile veri doğrulama ve modelleme
+- 🗺️ Belirli coğrafi koordinatlara göre veri filtreleme
+- 🧠 Hatalı kayıtları atlayarak sağlam kayıtları kaydetme
+- 🐘 PostgreSQL veritabanına kayıt
+- 🐳 Docker ile kolay kurulum ve çalıştırma
 
-## Bonus
-- Database: Use an ORM for PostgreSQL operations
-- Logging: Comprehensive logging system
-- API Endpoint: Flask/FastAPI endpoint to trigger/control scraper 
-  (Hint: you can implement this in an async fashion)
-- Performance: Multithreading/async implementation
-- Find address from lat/long field
-- Feel free to use your creativity every additional field is appreciated
+## 🛠️ Teknolojiler
+
+- Python
+- FastAPI
+- SQLAlchemy
+- Pydantic
+- PostgreSQL
+- Docker
+
+## ⚙️ Kullanım
+
+1. PostgreSQL veritabanını kur ve yapılandır.
+2. `.env` dosyasını oluştur ve veritabanı bağlantı bilgilerini gir.
+3. Docker ile projeyi başlat:
+
+```bash
+docker-compose up --build
