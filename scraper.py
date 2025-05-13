@@ -1,8 +1,8 @@
 import httpx
 import time
-from src.models.campground import Campground
-from database import SessionLocal, CampgroundDB
-from sqlalchemy.exc import IntegrityError
+from src.models.campground import Campground, CampgroundDB
+from database import SessionLocal
+#from sqlalchemy.exc import IntegrityError
 
 API_URL = "https://thedyrt.com/api/v6/locations/search-results"
 HEADERS = {"User-Agent": "Mozilla/5.0"}
@@ -20,21 +20,18 @@ def fetch_campgrounds(bbox: tuple[float, float, float, float]):
         "page[number]": 1,
         "page[size]": 500
     }
-    with httpx.Client(headers=HEADERS) as client:
+    with httpx.Client(headers=HEADERS, timeout=30.0) as client:
         response = client.get(API_URL, params=params)
         response.raise_for_status()
         return response.json()
 
 def save_campgrounds(data):
-    print("🔍 API response:", data)  # Print full API response for debug
     db = SessionLocal()
     for item in data.get("data", []):
         try:
             attributes = item.get("attributes", {})
             attributes["id"] = item["id"]
             attributes["links"] = item.get("links", {})
-            print("🔎 Sample campground data:", attributes)
-            break  # sadece ilk kampı göster ve çık
 
             model = Campground.model_validate(attributes)
 
@@ -83,7 +80,6 @@ def run_nationwide_scrape():
             try:
                 data = fetch_campgrounds(bbox)
                 save_campgrounds(data)
-                return  # sadece bir bbox işlenip çıkılsın diye eklendi
             except Exception as e:
                 print(f"❌ Error in bbox {bbox}: {e}")
             time.sleep(0.5)

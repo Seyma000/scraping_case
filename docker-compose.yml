@@ -1,22 +1,22 @@
-
-version: "3.8"
-
 services:
-
-  postgres:
-    image: postgres:13
+  db:
+    image: postgres:15
     environment:
-      POSTGRES_DB: case_study  # You can change those
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
+      POSTGRES_DB: campgrounds
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     ports:
-      - "5432:5432"
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
 
   scraper:
     build: .
     depends_on:
-      - postgres
-    volumes:
-      - .:/src
+      - db
     environment:
-      DB_URL: postgresql://user:password@postgres:5432/case_study
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/campgrounds
+    command: python scraper.py
+
+volumes:
+  pgdata:
